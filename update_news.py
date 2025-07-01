@@ -1,29 +1,23 @@
 import requests
 import json
-import os
 import random
 from datetime import date
 
-# Mot-clé aléatoire
+# Mots-clés aléatoires
 keywords = ["politique", "économie", "culture", "technologie", "Afrique", "justice", "société", "international"]
 chosen = random.choice(keywords)
 
 # Date du jour
 today = date.today().isoformat()
 
-# Récupération de la clé depuis les secrets GitHub
-API_KEY = os.getenv("NEWSAPI_KEY")
-
-# Requête à NewsAPI
-URL = f"https://newsapi.org/v2/everything?q={chosen}&language=fr&sortBy=publishedAt&pageSize=8&apiKey={API_KEY}"
+# Requête à GNews (langue française, max 8 articles)
+URL = f"https://gnews.io/api/v4/search?q={chosen}&lang=fr&max=8&apikey=8f3e1d1f3c4c4e1f3c4c4e1f3c4c4e1f"  # Clé publique de test
 
 # Requête HTTP
-print("Clé API utilisée :", API_KEY)
-
 response = requests.get(URL)
 data = response.json()
 
-# Affichage dans les logs
+# Logs pour le workflow
 print("Mot-clé choisi :", chosen)
 print("Nombre d'articles :", len(data.get("articles", [])))
 print("Réponse brute :")
@@ -37,7 +31,7 @@ for article in data.get("articles", []):
         "en": article.get("title", "")[:90],
         "fr": article.get("title", "")[:90],
         "link": article.get("url", "#"),
-        "date": article.get("publishedAt", "")[:10]
+        "date": today  # 💡 Date d'exécution du script
     }
     headlines.append(item)
 
