@@ -77,7 +77,31 @@
   container.innerHTML = "<div class='news-slide active'><div>Chargement des titres…</div></div>";
   slideIndex = 0;
 
-  fetch("https://radioaugusta.github.io/news-widget/titres.json")
+fetch("titres.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("news-container");
+    container.innerHTML = "";
+    const headlines = data.articles || data; // compatible avec les deux formats
+
+    headlines.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "news-slide";
+      div.innerHTML = `
+        <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
+        <div class="news-separator"></div>
+        <div class="news-translation">${item.fr}</div>
+      `;
+      container.appendChild(div);
+    });
+
+    slides = document.querySelectorAll('.news-slide');
+    if (slides.length > 0) slides[0].classList.add('active');
+  })
+  .catch(err => {
+    console.error("Erreur JSON :", err);
+    container.innerHTML = "<div class='news-slide active'><div>Erreur lors du chargement des titres.</div></div>";
+  });
 
     .then(res => res.json())
     .then(headlines => {
