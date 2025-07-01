@@ -24,9 +24,10 @@ jobs:
         run: pip install requests
 
       - name: Lancer le script de mise à jour
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-        run: python update_news.py
+  env:
+    API_KEY: ${{ secrets.API_KEY }}
+  run: python update_news.py
+
 - name: 🔍 Afficher contenu de titres.json
   run: cat titres.json
 
