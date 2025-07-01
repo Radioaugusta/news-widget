@@ -18,6 +18,8 @@ API_KEY = os.getenv("NEWSAPI_KEY")
 URL = f"https://newsapi.org/v2/everything?q={chosen}&language=fr&from={today}&pageSize=8&apiKey={API_KEY}"
 
 # Requête HTTP
+print("Clé API utilisée :", API_KEY)
+
 response = requests.get(URL)
 data = response.json()
 
