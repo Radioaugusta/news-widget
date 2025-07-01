@@ -14,7 +14,7 @@ today = date.today().isoformat()
 # Clé API
 API_KEY = os.getenv("GNEWS_API_KEY")
 
-# Requête à l'API GNews
+# Requête à l’API GNews
 URL = f"https://gnews.io/api/v4/search?q={chosen}&lang=fr&from={today}&max=4&token={API_KEY}"
 
 # Requête HTTP
@@ -31,10 +31,7 @@ for article in data.get("articles", []):
         "link": article.get("url", "#"),
         "date": article.get("publishedAt", "")[:10]
     }
-    headlines.append(item)
-
-
-    headlines.append(item)
+    headlines.append(item)  # ✅ Juste une fois
 
 # Sauvegarde dans le fichier JSON
 with open("titres.json", "w", encoding="utf-8") as f:
