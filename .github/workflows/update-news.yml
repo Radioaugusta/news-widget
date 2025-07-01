@@ -42,9 +42,9 @@ jobs:
 
       - name: Combine world + Côte d’Ivoire headlines
         run: |
-          jq -s '.[0].articles + .[1]' world.json ivoire.json > headlines.json
+          jq -s '.[0].articles + .[1]' world.json ivoire.json > titres.json
 
-            - name: Commit updated headlines
+      - name: Commit updated headlines
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
@@ -52,6 +52,6 @@ jobs:
           git config --global user.email "actions@github.com"
           git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/${{ github.repository }}
           git add titres.json
-          git commit -m "📰 Mise à jour quotidienne des titres d’actualités"
-          git push
+          git commit -m "📰 Mise à jour quotidienne des titres d’actualités" || echo "Pas de changement à enregistrer"
+          git push || echo "Erreur lors du push"
 
