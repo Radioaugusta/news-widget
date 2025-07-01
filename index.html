@@ -1,101 +1,129 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>World News</title>
+  <meta charset="UTF-8" />
+  <title>World News / Infos du monde</title>
   <style>
-    body {
-      margin: 0;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      width: 600px;
-      margin: 50px auto;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    body {}
+
+    .news-widget {
+      width: 320px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      font-family: sans-serif;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      border: 1px solid #ccc;
     }
-    .header {
-      background-color: #0074D9;
+
+    .news-header {
+      background-color: #2374e1;
       color: white;
       text-align: center;
-      padding: 15px;
-      font-size: 1.4em;
+      font-size: 18px;
       font-weight: bold;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      padding: 10px;
     }
-    .news {
-      padding: 20px;
-      text-align: center;
-      min-height: 120px;
+
+    .news-slide {
+      display: none;
+      padding: 10px;
     }
-    .en {
-      font-weight: bold;
-      font-size: 1.1em;
-      color: #000;
+
+    .news-slide.active {
+      display: block;
     }
-    .fr {
-      font-style: italic;
-      margin-top: 8px;
-      font-size: 1em;
-      color: #444;
+
+    .news-title {
+      font-weight: normal;
+      color: #222;
+      margin-bottom: 6px;
     }
-    .date {
-      margin-top: 10px;
-      font-size: 0.9em;
-      color: #777;
+
+    .news-separator {
+      border-top: 1px dashed #ccc;
+      margin: 6px 0;
     }
-    hr {
-      border: none;
-      border-top: 1px solid #ccc;
-      margin: 14px auto;
-      width: 60%;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
+
+    .news-translation {
+      font-style: normal;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">World News</div>
-    <div class="news" id="slide"></div>
+  <div class="news-widget">
+    <div class="news-header">🌍 World News / Infos du monde</div>
+    <div id="news-container">
+      <div class="news-slide active">
+        <div>Loading latest headlines…</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    fetch("titres.json")
-      .then(response => response.json())
-      .then(data => {
-        let index = 0;
-        const slide = document.getElementById("slide");
+    let slideIndex = 0;
+    let slides = [];
 
-        function showSlide(i) {
-          const item = data[i];
-          slide.innerHTML = `
-            <a href="${item.link}" target="_blank">
-              <div class="en">${item.en}</div>
-              <hr>
-              <div class="fr">${item.fr}</div>
-              <div class="date">📅 ${item.date || "date inconnue"}</div>
-            </a>
-          `;
+    function updateSlideshow() {
+      const allSlides = document.querySelectorAll('.news-slide');
+      allSlides.forEach(s => s.classList.remove('active'));
+      slideIndex = (slideIndex + 1) % allSlides.length;
+      allSlides[slideIndex].classList.add('active');
+    }
+
+    function loadNews() {
+      const container = document.getElementById("news-container");
+      container.innerHTML = "<div class='news-slide active'><div>Loading...</div></div>";
+      slideIndex = 0;
+
+      const headlines = [
+        {
+          en: "Europe swelters under record heatwave as Spain hits 46°C",
+          fr: "L’Europe suffoque sous une canicule historique, 46°C atteints en Espagne",
+          link: "https://www.bbc.com/news/world-europe-67654321"
+        },
+        {
+          en: "UK Prime Minister faces backlash over welfare U-turn",
+          fr: "Le Premier ministre britannique critiqué pour son revirement sur les aides sociales",
+          link: "https://news.sky.com/uk"
+        },
+        {
+          en: "Ivory Coast opposition protests exclusion of key candidates",
+          fr: "Côte d’Ivoire : l’opposition proteste contre l’exclusion de candidats majeurs",
+          link: "https://www.africanews.com/tag/cote-divoire/"
+        },
+        {
+          en: "Israel and Iran agree to phased ceasefire after weeks of tension",
+          fr: "Israël et l’Iran s’accordent sur un cessez-le-feu progressif après des semaines de tension",
+          link: "https://www.cnn.com/world"
+        },
+        {
+          en: "NATO leaders pledge 5% defense spending amid global uncertainty",
+          fr: "Les dirigeants de l’OTAN s’engagent à consacrer 5 % aux dépenses militaires face à l’instabilité mondiale",
+          link: "https://www.france24.com/en/"
         }
+      ];
 
-        showSlide(index);
-        setInterval(() => {
-          index = (index + 1) % data.length;
-          showSlide(index);
-        }, 7000); // ⏱️ toutes les 7 secondes
-      })
-      .catch(error => {
-        console.error("Erreur lors du chargement des titres :", error);
-        document.getElementById("slide").innerText = "Impossible de charger les actualités.";
+      container.innerHTML = "";
+      headlines.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "news-slide";
+        div.innerHTML = `
+          <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
+          <div class="news-separator"></div>
+          <div class="news-translation">${item.fr}</div>
+        `;
+        container.appendChild(div);
       });
+
+      slides = document.querySelectorAll('.news-slide');
+      slides[0].classList.add('active');
+    }
+
+    loadNews();
+    setInterval(updateSlideshow, 5000);
+    setInterval(loadNews, 300000);
   </script>
 </body>
 </html>
