@@ -72,12 +72,35 @@
       allSlides[slideIndex].classList.add('active');
     }
 
-    function loadNews() {
-      const container = document.getElementById("news-container");
-      container.innerHTML = "<div class='news-slide active'><div>Loading...</div></div>";
-      slideIndex = 0;
+   function loadNews() {
+  const container = document.getElementById("news-container");
+  container.innerHTML = "<div class='news-slide active'><div>Chargement des titres…</div></div>";
+  slideIndex = 0;
 
-      const headlines = [
+  fetch("titres.json")
+    .then(res => res.json())
+    .then(headlines => {
+      container.innerHTML = "";
+      headlines.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "news-slide";
+        div.innerHTML = `
+          <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
+          <div class="news-separator"></div>
+          <div class="news-translation">${item.fr}</div>
+        `;
+        container.appendChild(div);
+      });
+
+      slides = document.querySelectorAll('.news-slide');
+      if (slides.length > 0) slides[0].classList.add('active');
+    })
+    .catch(err => {
+      container.innerHTML = "<div class='news-slide active'><div>Impossible de charger les titres.</div></div>";
+      console.error("Erreur lors du chargement :", err);
+    });
+}
+
         {
           en: "Europe swelters under record heatwave as Spain hits 46°C",
           fr: "L’Europe suffoque sous une canicule historique, 46°C atteints en Espagne",
