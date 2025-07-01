@@ -8,10 +8,10 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout du dépôt
         uses: actions/checkout@v3
+
 
       - name: Configurer Python
         uses: actions/setup-python@v4
