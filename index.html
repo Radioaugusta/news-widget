@@ -77,8 +77,8 @@
       container.innerHTML = "<div class='news-slide active'><div>Chargement des news…</div></div>";
       slideIndex = 0;
 
-      fetch("titres.json")
-        ?v=${Date.now()}
+     fetch("titres.json?v=" + Date.now())
+
         .then(res => res.json())
         .then(data => {
           const headlines = data.articles || data;
