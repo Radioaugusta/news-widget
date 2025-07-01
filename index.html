@@ -5,27 +5,37 @@
   <title>World News</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
       background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .widget {
+      width: 600px;
+      background-color: white;
+      margin: 30px auto;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      overflow: hidden;
+      border: 1px solid #ccc;
     }
     header {
       background-color: #0055aa;
       color: white;
       padding: 15px 20px;
-      text-align: center;
       font-size: 1.5em;
       font-weight: bold;
+      border-radius: 12px 12px 0 0;
     }
     main {
-      background-color: white;
-      max-width: 800px;
-      margin: 20px auto;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .item {
       margin-bottom: 25px;
+    }
+    .item a {
+      text-decoration: none;
+      color: inherit;
     }
     .en {
       font-weight: bold;
@@ -37,28 +47,26 @@
       margin-top: 4px;
       color: #333;
     }
+    .date {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.85em;
+      color: #666;
+    }
     hr {
       border: none;
       border-top: 1px solid #ccc;
       margin: 15px 0;
     }
-    .date {
-      display: block;
-      margin-top: 4px;
-      font-size: 0.85em;
-      color: #666;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
   </style>
 </head>
 <body>
-  <header>World News</header>
-  <main id="container">
-    <!-- Articles seront chargés ici -->
-  </main>
+  <div class="widget">
+    <header>World News</header>
+    <main id="container">
+      <!-- Articles chargés ici -->
+    </main>
+  </div>
 
   <script>
     fetch("titres.json")
