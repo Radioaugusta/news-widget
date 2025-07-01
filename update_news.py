@@ -4,18 +4,18 @@ import os
 import random
 from datetime import date
 
-# Mot-clé aléatoire pour varier chaque jour
-keywords = ["politique", "économie", "culture", "technologie", "Afrique", "élections", "justice", "société"]
+# Mots-clés aléatoires
+keywords = ["politique", "économie", "culture", "technologie", "Afrique", "justice", "société", "international"]
 chosen = random.choice(keywords)
 
 # Date du jour
 today = date.today().isoformat()
 
-# Clé API
-API_KEY = os.getenv("GNEWS_API_KEY")
+# Clé API NewsAPI
+API_KEY = os.getenv("NEWSAPI_KEY")  # 💡 Mets ta clé API dans GitHub secrets
 
-# Requête à l’API GNews
-URL = f"https://gnews.io/api/v4/search?q={chosen}&lang=fr&from={today}&max=4&token={API_KEY}"
+# Requête à NewsAPI
+URL = f"https://newsapi.org/v2/everything?q={chosen}&language=fr&from={today}&pageSize=8&apiKey={API_KEY}"
 
 # Requête HTTP
 response = requests.get(URL)
@@ -26,13 +26,13 @@ headlines = []
 
 for article in data.get("articles", []):
     item = {
-        "en": article.get("title", "")[:90],
-        "fr": article.get("title", "")[:90],
+        "en": article.get("title", "")[:90],  # Titre original
+        "fr": article.get("title", "")[:90],  # Titre en français (même champ ici)
         "link": article.get("url", "#"),
-        "date": article.get("publishedAt", "")[:10]
+        "date": article.get("publishedAt", "")[:10]  # ✅ Date au format AAAA-MM-JJ
     }
-    headlines.append(item)  # ✅ Juste une fois
+    headlines.append(item)
 
-# Sauvegarde dans le fichier JSON
+# Sauvegarde du fichier
 with open("titres.json", "w", encoding="utf-8") as f:
     json.dump(headlines, f, indent=2, ensure_ascii=False)
