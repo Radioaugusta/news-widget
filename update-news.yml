@@ -26,10 +26,11 @@ jobs:
           GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
         run: python update_news.py
 
-      - name: Commit et push du fichier headlines.json
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add titres.json
-          git commit -m "Mise à jour automatique des titres"
-          git push
+      - name: Commit et push du fichier titres.json
+  run: |
+    git config --global user.name "github-actions"
+    git config --global user.email "github-actions@github.com"
+    git add titres.json || echo "Fichier titres.json non trouvé"
+    git diff --cached --quiet || git commit -m "Mise à jour automatique des titres"
+    git push
+
