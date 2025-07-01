@@ -15,7 +15,7 @@ today = date.today().isoformat()
 API_KEY = os.getenv("NEWSAPI_KEY")
 
 # Requête à NewsAPI
-URL = f"https://newsapi.org/v2/everything?q={chosen}&language=fr&from={today}&pageSize=8&apiKey={API_KEY}"
+URL = f"https://newsapi.org/v2/everything?q={chosen}&language=fr&sortBy=publishedAt&pageSize=8&apiKey={API_KEY}"
 
 # Requête HTTP
 print("Clé API utilisée :", API_KEY)
