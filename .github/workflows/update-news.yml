@@ -1,39 +1,30 @@
-name: Mise à jour des actualités
+name: Update World News
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Tous les jours à minuit UTC
-  workflow_dispatch:
+    - cron: '0 6 * * *'  # Tous les jours à 6h du matin (UTC)
+  workflow_dispatch:     # Permet aussi de lancer manuellement
 
 jobs:
-  update:
+  fetch-news:
     runs-on: ubuntu-latest
 
+    env:
+      NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+
     steps:
-      - name: Récupérer le dépôt
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Installer Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Installer les dépendances
-        run: pip install requests
-
-      - name: Exécuter le script de mise à jour
-        run: python update_news.py
-
-      - name: Commit et push du fichier titres.json
+      - name: Fetch latest headlines
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          if [ -f titres.json ]; then
-            git add titres.json
-            git diff --cached --quiet || (
-              git commit -m "Mise à jour automatique des titres"
-              git push
-            )
-          else
-            echo "Fichier titres.json introuvable. Aucun commit effectué."
-          fi
+          curl "https://newsapi.org/v2/top-headlines?language=en&country=gb&apiKey=$NEWS_API_KEY" \
+            -o headlines.json
+
+      - name: Commit updated headlines
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add headlines.json
+          git commit -m "📰 Update headlines.json with latest news"
+          git push
