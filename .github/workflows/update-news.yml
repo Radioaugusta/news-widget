@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout du dépôt
+      - name: Checkout avec token personnel
         uses: actions/checkout@v3
+  with:
+    token: ${{ secrets.GH_PAT }}
+
 
       - name: Configurer Python
         uses: actions/setup-python@v4
@@ -33,8 +36,7 @@ jobs:
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
-          git remote -v
+         
 
       - name: Commit et push des titres mis à jour
         run: |
