@@ -2,8 +2,8 @@ name: Mise à jour des news
 
 on:
   schedule:
-    - cron: '0 7 * * *'  # Tous les jours à 7h UTC (9h Paris)
-  workflow_dispatch:  # Lancement manuel possible
+    - cron: '0 7 * * *'
+  workflow_dispatch:
 
 jobs:
   update:
@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Installer les dépendances (si besoin)
+      - name: Installer les dépendances
         run: pip install requests
 
       - name: Lancer le script de mise à jour
@@ -26,15 +26,17 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: python update_news.py
 
-      - name: Authentification Git via token personnel
+      - name: 🔐 Authentification Git via token personnel
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
-          echo "✅ Modification de l'URL du dépôt avec le token..."
+          echo "Longueur du token GH_PAT : ${#GH_PAT}"
+          echo "Configuration de l'URL origin avec token..."
+          git remote -v
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
-          git remote -v  # Juste pour vérifier
+          git remote -v
 
-      - name: Commit et push des titres mis à jour
+      - name: 📦 Commit et push des titres mis à jour
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
@@ -42,6 +44,5 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git add titres.json
           git commit -m "🔄 Mise à jour auto des titres - $(date +'%Y-%m-%d')" || echo "Aucun changement à committer"
+          echo "Tentative de push..."
           git push
-
-
