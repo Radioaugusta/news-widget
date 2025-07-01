@@ -26,8 +26,10 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: python update_news.py
 
-      - name: Authentification Git via le token personnel
-        run: git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/Radioaugusta/news-widget.git
+      - name: Authentification Git via token personnel
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
 
       - name: Commit et push des titres mis à jour
         env:
@@ -39,4 +41,3 @@ jobs:
           git commit -m "🔄 Mise à jour auto des titres - $(date +'%Y-%m-%d')" || echo "Aucun changement à committer"
           git push
 
-  
