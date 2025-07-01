@@ -1,9 +1,9 @@
-name: Update World News
+name: Update World + Côte d'Ivoire News
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Tous les jours à 6h du matin (UTC)
-  workflow_dispatch:     # Permet aussi de lancer manuellement
+    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
+  workflow_dispatch:
 
 jobs:
   fetch-news:
@@ -16,15 +16,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest headlines
+      - name: Fetch world headlines
         run: |
-          curl "https://newsapi.org/v2/top-headlines?language=en&country=gb&apiKey=$NEWS_API_KEY" \
-            -o headlines.json
+          curl "https://newsapi.org/v2/top-headlines?language=en&country=us&apiKey=$NEWS_API_KEY" \
+            -o world.json
+
+      - name: Add Côte d’Ivoire headlines
+        run: |
+          echo '[
+            {
+              "en": "Côte d’Ivoire: four dead in stadium stampede after RHDP meeting",
+              "fr": "Côte d’Ivoire : quatre morts dans une bousculade après le meeting du RHDP",
+              "link": "https://information.tv5monde.com/afrique/cote-divoire-quatre-morts-dans-une-bousculade-apres-le-meeting-du-parti-au-pouvoir-2778479"
+            },
+            {
+              "en": "Technical incident at Abidjan Port quickly resolved",
+              "fr": "Côte d’Ivoire : incident technique au Port d’Abidjan rapidement maîtrisé",
+              "link": "https://www.koaci.com/article/2025/06/24/cote-divoire/societe/cote-divoire-port-dabidjan-un-incident-technique-sur-un-navire-rapidement-maitrise_187958.html"
+            }
+          ]' > ivoire.json
+
+      - name: Combine world + Côte d’Ivoire headlines
+        run: |
+          jq -s '.[0].articles + .[1]' world.json ivoire.json > headlines.json
 
       - name: Commit updated headlines
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add headlines.json
-          git commit -m "📰 Update headlines.json with latest news"
+          git commit -m "📰 Mise à jour quotidienne des actualités monde + Côte d’Ivoire"
           git push
