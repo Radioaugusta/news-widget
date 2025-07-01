@@ -32,14 +32,17 @@ jobs:
           python update_news.py
 
       # 🧼 Vérifie si le fichier existe avant commit
-      - name: Commit et push du fichier titres.json
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          if [ -f titres.json ]; then
-            git add titres.json
-            git diff --cached --quiet || git commit -m "Mise à jour automatique des titres"
-            git push
-          else
-            echo "Le fichier titres.json est introuvable. Aucun commit effectué."
+    - name: Commit et push du fichier titres.json
+  run: |
+    git config --global user.name "github-actions"
+    git config --global user.email "github-actions@github.com"
+    if [ -f titres.json ]; then
+      git add titres.json
+      git diff --cached --quiet || (
+        git commit -m "Mise à jour automatique des titres"
+        git push
+      )
+    else
+      echo "titres.json introuvable. Aucun commit effectué."
+
           fi
