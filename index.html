@@ -5,90 +5,99 @@
   <title>World News</title>
   <style>
     body {
-      background-color: #f0f0f0;
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
     }
+
     .widget {
       width: 600px;
+      margin: 50px auto;
       background-color: white;
-      margin: 30px auto;
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
       overflow: hidden;
       border: 1px solid #ccc;
     }
+
     header {
       background-color: #0055aa;
       color: white;
-      padding: 15px 20px;
-      font-size: 1.5em;
+      padding: 16px 20px;
+      font-size: 1.6em;
       font-weight: bold;
-      border-radius: 12px 12px 0 0;
+      text-align: center;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
-    main {
-      padding: 20px;
+
+    .slide {
+      padding: 25px;
+      text-align: center;
     }
-    .item {
-      margin-bottom: 25px;
-    }
-    .item a {
-      text-decoration: none;
-      color: inherit;
-    }
+
     .en {
       font-weight: bold;
-      font-size: 1.05em;
+      font-size: 1.1em;
       color: #000;
     }
+
     .fr {
       font-style: italic;
-      margin-top: 4px;
-      color: #333;
+      margin-top: 8px;
+      font-size: 1em;
+      color: #444;
     }
+
     .date {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.85em;
-      color: #666;
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #777;
     }
+
     hr {
       border: none;
       border-top: 1px solid #ccc;
-      margin: 15px 0;
+      margin: 20px auto;
+      width: 80%;
     }
   </style>
 </head>
 <body>
   <div class="widget">
     <header>World News</header>
-    <main id="container">
-      <!-- Articles chargés ici -->
-    </main>
+    <div class="slide" id="slide"></div>
   </div>
 
   <script>
     fetch("titres.json")
       .then(response => response.json())
       .then(data => {
-        const container = document.getElementById("container");
-        data.forEach(item => {
-          const div = document.createElement("div");
-          div.className = "item";
-          div.innerHTML = `
+        let index = 0;
+        const slide = document.getElementById("slide");
+
+        function showSlide(i) {
+          const item = data[i];
+          slide.innerHTML = `
             <a href="${item.link}" target="_blank">
               <div class="en">${item.en}</div>
+              <hr>
               <div class="fr">${item.fr}</div>
-              <span class="date">📅 ${item.date || "date inconnue"}</span>
+              <div class="date">📅 ${item.date || "date inconnue"}</div>
             </a>
-            <hr>
           `;
-          container.appendChild(div);
-        });
+        }
+
+        showSlide(index);
+        setInterval(() => {
+          index = (index + 1) % data.length;
+          showSlide(index);
+        }, 7000); // ⏱️ 7 secondes
       })
       .catch(error => {
         console.error("Erreur lors du chargement des titres :", error);
+        document.getElementById("slide").innerText = "Impossible de charger les actualités.";
       });
   </script>
 </body>
