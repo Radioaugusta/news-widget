@@ -2,33 +2,44 @@ name: Mise à jour des actualités
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Tous les jours à 6h du matin UTC
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # Tous les jours à minuit UTC
+  workflow_dispatch:     # Exécution manuelle
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Cloner le dépôt
+      # ⏬ Récupération du dépôt
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Installer Python
+      # 🐍 Installation de Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Installer les dépendances
-        run: pip install requests
-
-      - name: Générer headlines.json
-        env:
-          GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
-        run: python update_news.py
-
-      - name: Commiter et pousser les changements
+      # 📦 Installation des dépendances (si besoin)
+      - name: Install dependencies
         run: |
-          git config user.name "Robot Augusta"
-          git config user.email "bot@radioaugusta.com"
-          git add headlines.json
-          git commit -m "📰 Mise à jour automatique des actualités" || echo "Aucun changement"
-          git push
+          pip install requests
+
+      # 🧠 Exécution du script pour récupérer les titres
+      - name: Exécuter le script de mise à jour
+        run: |
+          echo "Lancement du script update_news.py..."
+          python update_news.py
+
+      # 🧼 Vérifie si le fichier existe avant commit
+      - name: Commit et push du fichier titres.json
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          if [ -f titres.json ]; then
+            git add titres.json
+            git diff --cached --quiet || git commit -m "Mise à jour automatique des titres"
+            git push
+          else
+            echo "Le fichier titres.json est introuvable. Aucun commit effectué."
+          fi
