@@ -22,5 +22,5 @@ for article in data.get("articles", []):
     }
     headlines.append(item)
 
-with open("headlines.json", "w", encoding="utf-8") as f:
+with open("titres.json", "w", encoding="utf-8") as f:
     json.dump(headlines, f, indent=2, ensure_ascii=False)
