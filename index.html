@@ -6,72 +6,55 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       background-color: #f0f0f0;
       font-family: Arial, sans-serif;
     }
-
-    .widget {
+    .container {
       width: 600px;
-      height: 200px; /* ✅ Hauteur fixe restaurée */
       margin: 50px auto;
       background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       overflow: hidden;
       border: 1px solid #ccc;
-      display: flex;
-      flex-direction: column;
     }
-
-    header {
-      background-color: #0055aa;
+    .header {
+      background-color: #0074D9;
       color: white;
-      padding: 16px 20px;
-      font-size: 1.6em;
-      font-weight: bold;
       text-align: center;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-      flex-shrink: 0;
+      padding: 15px;
+      font-size: 1.4em;
+      font-weight: bold;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
     }
-
-    .slide {
+    .news {
       padding: 20px;
       text-align: center;
-      overflow: hidden;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      min-height: 120px;
     }
-
     .en {
       font-weight: bold;
       font-size: 1.1em;
       color: #000;
     }
-
     .fr {
       font-style: italic;
-      margin-top: 6px;
-      font-size: 1em;
-      color: #333;
-    }
-
-    .date {
       margin-top: 8px;
+      font-size: 1em;
+      color: #444;
+    }
+    .date {
+      margin-top: 10px;
       font-size: 0.9em;
       color: #777;
     }
-
     hr {
       border: none;
       border-top: 1px solid #ccc;
-      margin: 12px auto;
+      margin: 14px auto;
       width: 60%;
     }
-
     a {
       text-decoration: none;
       color: inherit;
@@ -79,9 +62,9 @@
   </style>
 </head>
 <body>
-  <div class="widget">
-    <header>World News</header>
-    <div class="slide" id="slide"></div>
+  <div class="container">
+    <div class="header">World News</div>
+    <div class="news" id="slide"></div>
   </div>
 
   <script>
@@ -107,7 +90,7 @@
         setInterval(() => {
           index = (index + 1) % data.length;
           showSlide(index);
-        }, 7000); // 🔄 Toutes les 7 secondes
+        }, 7000); // ⏱️ toutes les 7 secondes
       })
       .catch(error => {
         console.error("Erreur lors du chargement des titres :", error);
