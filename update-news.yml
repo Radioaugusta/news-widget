@@ -1,0 +1,35 @@
+name: Update News
+
+on:
+  schedule:
+    - cron: '0 8 * * *'       # Tous les jours à 8h du matin
+  workflow_dispatch:          # Permet de le lancer manuellement
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Installer les dépendances
+        run: pip install requests
+
+      - name: Exécuter le script de mise à jour
+        env:
+          GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
+        run: python update_news.py
+
+      - name: Commit et push du fichier headlines.json
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add headlines.json
+          git commit -m "Mise à jour automatique des titres"
+          git push
