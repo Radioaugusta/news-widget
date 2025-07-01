@@ -77,7 +77,8 @@
   container.innerHTML = "<div class='news-slide active'><div>Chargement des titres…</div></div>";
   slideIndex = 0;
 
-  fetch("titres.json")
+  fetch("https://radioaugusta.github.io/news-widget/titres.json")
+
     .then(res => res.json())
     .then(headlines => {
       container.innerHTML = "";
