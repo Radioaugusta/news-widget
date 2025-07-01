@@ -12,9 +12,8 @@ jobs:
     steps:
       - name: Checkout avec token personnel
         uses: actions/checkout@v3
-  with:
-    token: ${{ secrets.GH_PAT }}
-
+        with:
+          token: ${{ secrets.GH_PAT }}
 
       - name: Configurer Python
         uses: actions/setup-python@v4
@@ -29,16 +28,7 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: python update_news.py
 
-      - name: Vérifier le contenu de titres.json
-        run: cat titres.json
-
-      - name: Authentifier Git avec token personnel
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-         
-
-      - name: Commit et push des titres mis à jour
+      - name: Commit & push des titres mis à jour
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
