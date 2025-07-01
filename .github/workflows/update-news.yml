@@ -34,10 +34,18 @@ jobs:
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
           git remote -v
 
-      - name: Commit et push des titres mis à jour
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git add titres.json
-          git commit -m "🔄 MAJ titres - $(date +'%Y-%m-%d')" || echo "Aucun changement"
-          git push
+      - name: Commit & push avec authentification
+  env:
+    GH_PAT: ${{ secrets.GH_PAT }}
+  run: |
+    echo "🧪 Longueur GH_PAT : ${#GH_PAT}"
+    git config --global user.name "github-actions"
+    git config --global user.email "github-actions@github.com"
+    echo "🔧 Authentification avec le token..."
+    git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
+    git remote -v
+    git add titres.json
+    git commit -m "🔄 MAJ titres - $(date +'%Y-%m-%d')" || echo "⚠️ Aucun changement à committer"
+    echo "🚀 Tentative de push..."
+    git push
+
