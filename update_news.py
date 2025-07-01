@@ -25,12 +25,13 @@ data = response.json()
 headlines = []
 
 for article in data.get("articles", []):
-    item = {
-        "en": article.get("title", "")[:90],
-        "fr": article.get("title", "")[:90],
-        "link": article.get("url", "#"),
-        "date": article.get("publishedAt", "")[:10]
-    }
+   item = {
+    "en": article.get("title", "")[:90],
+    "fr": article.get("title", "")[:90],
+    "link": article.get("url", "#"),
+    "date": article.get("publishedAt", "")[:10]
+}
+
     headlines.append(item)
 
 # Sauvegarde dans le fichier JSON
