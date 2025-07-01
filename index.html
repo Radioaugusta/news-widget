@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <title>World News / Infos du monde</title>
@@ -56,7 +56,7 @@
     <div class="news-header">🌍 World News / Infos du monde</div>
     <div id="news-container">
       <div class="news-slide active">
-        <div>Loading latest headlines…</div>
+        <div>Chargement des news…</div>
       </div>
     </div>
   </div>
@@ -72,106 +72,39 @@
       allSlides[slideIndex].classList.add('active');
     }
 
-   function loadNews() {
-  const container = document.getElementById("news-container");
-  container.innerHTML = "<div class='news-slide active'><div>Chargement des titres…</div></div>";
-  slideIndex = 0;
+    function loadNews() {
+      const container = document.getElementById("news-container");
+      container.innerHTML = "<div class='news-slide active'><div>Chargement des news…</div></div>";
+      slideIndex = 0;
 
-fetch("titres.json")
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("news-container");
-    container.innerHTML = "";
-    const headlines = data.articles || data; // compatible avec les deux formats
+      fetch("titres.json")
+        .then(res => res.json())
+        .then(data => {
+          const headlines = data.articles || data;
+          container.innerHTML = "";
+          headlines.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "news-slide";
+            div.innerHTML = `
+              <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
+              <div class="news-separator"></div>
+              <div class="news-translation">${item.fr}</div>
+            `;
+            container.appendChild(div);
+          });
 
-    headlines.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "news-slide";
-      div.innerHTML = `
-        <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
-        <div class="news-separator"></div>
-        <div class="news-translation">${item.fr}</div>
-      `;
-      container.appendChild(div);
-    });
-
-    slides = document.querySelectorAll('.news-slide');
-    if (slides.length > 0) slides[0].classList.add('active');
-  })
-  .catch(err => {
-    console.error("Erreur JSON :", err);
-    container.innerHTML = "<div class='news-slide active'><div>Erreur lors du chargement des titres.</div></div>";
-  });
-
-    .then(res => res.json())
-    .then(headlines => {
-      container.innerHTML = "";
-      headlines.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "news-slide";
-        div.innerHTML = `
-          <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
-          <div class="news-separator"></div>
-          <div class="news-translation">${item.fr}</div>
-        `;
-        container.appendChild(div);
-      });
-
-      slides = document.querySelectorAll('.news-slide');
-      if (slides.length > 0) slides[0].classList.add('active');
-    })
-    .catch(err => {
-      container.innerHTML = "<div class='news-slide active'><div>Impossible de charger les titres.</div></div>";
-      console.error("Erreur lors du chargement :", err);
-    });
-}
-
-        {
-          en: "Europe swelters under record heatwave as Spain hits 46°C",
-          fr: "L’Europe suffoque sous une canicule historique, 46°C atteints en Espagne",
-          link: "https://www.bbc.com/news/world-europe-67654321"
-        },
-        {
-          en: "UK Prime Minister faces backlash over welfare U-turn",
-          fr: "Le Premier ministre britannique critiqué pour son revirement sur les aides sociales",
-          link: "https://news.sky.com/uk"
-        },
-        {
-          en: "Ivory Coast opposition protests exclusion of key candidates",
-          fr: "Côte d’Ivoire : l’opposition proteste contre l’exclusion de candidats majeurs",
-          link: "https://www.africanews.com/tag/cote-divoire/"
-        },
-        {
-          en: "Israel and Iran agree to phased ceasefire after weeks of tension",
-          fr: "Israël et l’Iran s’accordent sur un cessez-le-feu progressif après des semaines de tension",
-          link: "https://www.cnn.com/world"
-        },
-        {
-          en: "NATO leaders pledge 5% defense spending amid global uncertainty",
-          fr: "Les dirigeants de l’OTAN s’engagent à consacrer 5 % aux dépenses militaires face à l’instabilité mondiale",
-          link: "https://www.france24.com/en/"
-        }
-      ];
-
-      container.innerHTML = "";
-      headlines.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "news-slide";
-        div.innerHTML = `
-          <div class="news-title"><a href="${item.link}" target="_blank">${item.en}</a></div>
-          <div class="news-separator"></div>
-          <div class="news-translation">${item.fr}</div>
-        `;
-        container.appendChild(div);
-      });
-
-      slides = document.querySelectorAll('.news-slide');
-      slides[0].classList.add('active');
+          slides = document.querySelectorAll('.news-slide');
+          if (slides.length > 0) slides[0].classList.add('active');
+        })
+        .catch(err => {
+          console.error("Erreur JSON :", err);
+          container.innerHTML = "<div class='news-slide active'><div>⚠️ Impossible de charger les titres.</div></div>";
+        });
     }
 
     loadNews();
-    setInterval(updateSlideshow, 5000);
-    setInterval(loadNews, 300000);
+    setInterval(updateSlideshow, 6000); // slide toutes les 6 secondes
+    setInterval(loadNews, 300000);      // rafraîchissement toutes les 5 minutes
   </script>
 </body>
 </html>
