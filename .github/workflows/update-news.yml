@@ -2,7 +2,7 @@ name: Update World + Côte d'Ivoire News
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
+    - cron: '0 8 * * *' # Tous les jours à 08h UTC
   workflow_dispatch:
 
 jobs:
@@ -45,13 +45,11 @@ jobs:
           jq -s '.[0].articles + .[1]' world.json ivoire.json > titres.json
 
       - name: Commit updated headlines
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/${{ github.repository }}
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+          git pull --rebase
           git add titres.json
-          git commit -m "📰 Mise à jour quotidienne des titres d’actualités" || echo "Pas de changement à enregistrer"
-          git push || echo "Erreur lors du push"
-
+          git commit -m "📰 Mise à jour quotidienne des titres d’actualités" || echo "✅ Aucun changement à commiter"
+          git push || echo "❌ Push échoué"
