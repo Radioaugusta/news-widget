@@ -29,7 +29,10 @@ jobs:
       - name: Authentification Git via token personnel
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
-        run: git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
+        run: |
+          echo "✅ Modification de l'URL du dépôt avec le token..."
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Radioaugusta/news-widget.git
+          git remote -v  # Juste pour vérifier
 
       - name: Commit et push des titres mis à jour
         env:
@@ -40,4 +43,5 @@ jobs:
           git add titres.json
           git commit -m "🔄 Mise à jour auto des titres - $(date +'%Y-%m-%d')" || echo "Aucun changement à committer"
           git push
+
 
