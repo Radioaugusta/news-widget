@@ -41,7 +41,7 @@
           div.className = "item";
           div.innerHTML = `
             <a href="${item.link}" target="_blank">${item.fr}</a>
-            <span class="date">📅 ${item.date}</span>
+<span class="date">📅 ${item.date || "date inconnue"}</span>
           `;
           container.appendChild(div);
         });
