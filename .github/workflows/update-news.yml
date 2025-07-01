@@ -3,46 +3,37 @@ name: Mise à jour des actualités
 on:
   schedule:
     - cron: '0 0 * * *'  # Tous les jours à minuit UTC
-  workflow_dispatch:     # Exécution manuelle
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      # ⏬ Récupération du dépôt
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
 
-      # 🐍 Installation de Python
-      - name: Setup Python
+      - name: Installer Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      # 📦 Installation des dépendances (si besoin)
-      - name: Install dependencies
-        run: |
-          pip install requests
+      - name: Installer les dépendances
+        run: pip install requests
 
-      # 🧠 Exécution du script pour récupérer les titres
       - name: Exécuter le script de mise à jour
+        run: python update_news.py
+
+      - name: Commit et push du fichier titres.json
         run: |
-          echo "Lancement du script update_news.py..."
-          python update_news.py
-
-      # 🧼 Vérifie si le fichier existe avant commit
-    - name: Commit et push du fichier titres.json
-  run: |
-    git config --global user.name "github-actions"
-    git config --global user.email "github-actions@github.com"
-    if [ -f titres.json ]; then
-      git add titres.json
-      git diff --cached --quiet || (
-        git commit -m "Mise à jour automatique des titres"
-        git push
-      )
-    else
-      echo "titres.json introuvable. Aucun commit effectué."
-
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          if [ -f titres.json ]; then
+            git add titres.json
+            git diff --cached --quiet || (
+              git commit -m "Mise à jour automatique des titres"
+              git push
+            )
+          else
+            echo "Fichier titres.json introuvable. Aucun commit effectué."
           fi
