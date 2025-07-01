@@ -6,8 +6,12 @@ API_KEY = os.getenv("GNEWS_API_KEY")
 from datetime import date
 
 today = date.today().isoformat()
+from datetime import date
+
+today = date.today().isoformat()
 API_KEY = os.getenv("GNEWS_API_KEY")
-URL = f"https://gnews.io/api/v4/search?q=actualités&lang=fr&country=ci&from={today}&max=4&token={API_KEY}"
+URL = f"https://gnews.io/api/v4/search?q=politique OR économie OR culture&lang=fr&from={today}&max=4&token={API_KEY}"
+
 
 response = requests.get(URL)
 data = response.json()
