@@ -1,0 +1,34 @@
+<div id="news-francophone"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("titres_fr.json")
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById("news-francophone");
+
+      if (!Array.isArray(data) || data.length === 0) {
+        container.innerHTML = "<p>Aucune actualité disponible.</p>";
+        return;
+      }
+
+      let current = 0;
+
+      function showSlide(index) {
+        container.innerHTML = `<a href="${data[index].link}" target="_blank">${data[index].title}</a>`;
+      }
+
+      showSlide(current);
+
+      setInterval(() => {
+        current = (current + 1) % data.length;
+        showSlide(current);
+      }, 4000); // Changement toutes les 4 secondes
+    })
+    .catch(error => {
+      console.error("Erreur chargement JSON:", error);
+      document.getElementById("news-francophone").innerHTML =
+        "<p>Erreur de chargement des titres.</p>";
+    });
+});
+</script>
