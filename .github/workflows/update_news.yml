@@ -2,8 +2,8 @@ name: Mise à jour des titres RSS
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # ⏰ Tous les jours à 08h UTC
-  workflow_dispatch:     # 🧑‍💻 Permet le lancement manuel depuis l'interface GitHub
+    - cron: '0 8 * * *'  # Tous les jours à 08h UTC
+  workflow_dispatch:     # Permet le lancement manuel via l'onglet Actions
 
 jobs:
   update-news:
@@ -21,13 +21,16 @@ jobs:
       - name: 📦 Installer les dépendances
         run: pip install feedparser
 
-      - name: 🚀 Lancer le script de mise à jour
+      - name: 🚀 Lancer le script de mise à jour RSS
         run: python update_news_rss.py
 
-      - name: 📝 Enregistrer les changements
+      - name: 📝 Commit des changements
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
           git add titres.json
           git commit -m "📰 MàJ automatique des titres RSS"
           git push
