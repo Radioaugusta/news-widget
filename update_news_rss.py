@@ -2,7 +2,7 @@ import feedparser
 import json
 
 # 🌍 Flux RSS Sky News uniquement
-rss_url = "https://feeds.skynews.com/feeds/rss/home.xml"
+rss_url = "https://feeds.skynews.com/feeds/rss/uk.xml"
 
 # 📥 Récupération des titres
 feed = feedparser.parse(rss_url)
