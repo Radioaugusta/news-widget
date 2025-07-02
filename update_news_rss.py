@@ -1,27 +1,24 @@
 import feedparser
 import json
 
-# 🌍 Flux RSS anglophones
-rss_feeds = [
-    "https://feeds.bbci.co.uk/news/world/rss.xml",
-    "https://feeds.skynews.com/feeds/rss/world.xml"
-]
+# 🌍 Flux RSS Sky News uniquement
+rss_url = "https://feeds.skynews.com/feeds/rss/world.xml"
 
 # 📥 Récupération des titres
+feed = feedparser.parse(rss_url)
+print(f"🔍 Sky News → {len(feed.entries)} articles trouvés")
+
 titres = []
+for entry in feed.entries[:10]:  # Tu peux ajuster le nombre ici
+    titres.append({
+        "title": entry.title,
+        "link": entry.link
+    })
 
-for url in rss_feeds:
-    feed = feedparser.parse(url)
-    for entry in feed.entries[:5]:  # Limite à 5 titres par source
-        titres.append({
-            "title": entry.title,
-            "link": entry.link
-        })
-
-# 🧪 Vérification et écriture
+# 💾 Écriture du fichier JSON si des titres sont présents
 if titres:
     with open("titres.json", "w", encoding="utf-8") as f:
         json.dump(titres, f, ensure_ascii=False, indent=2)
     print(f"✅ {len(titres)} titres enregistrés dans 'titres.json'")
 else:
-    print("⚠️ Aucun titre récupéré. Le fichier n'a pas été modifié.")
+    print("⚠️ Aucun titre récupéré. Le fichier n’a pas été modifié.")
