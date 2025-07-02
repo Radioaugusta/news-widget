@@ -1,0 +1,33 @@
+name: Mise à jour RSS
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Toutes les heures
+  workflow_dispatch:      # Permet de lancer manuellement
+
+jobs:
+  update-rss:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installer feedparser
+        run: pip install feedparser
+
+      - name: Exécuter le script titres.py
+        run: python titres.py
+
+      - name: Commit du fichier titres.json
+        run: |
+          git config user.name "Radio Augusta Bot"
+          git config user.email "bot@radioaugusta.com"
+          git add titres.json
+          git commit -m "Mise à jour automatique des titres"
+          git push
