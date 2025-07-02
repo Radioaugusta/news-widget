@@ -24,7 +24,7 @@ jobs:
       - name: 🚀 Lancer le script de mise à jour RSS
         run: python update_news_rss.py
 
-      - name: 📝 Commit des changements
+            - name: 📝 Commit des changements
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
