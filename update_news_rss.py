@@ -4,6 +4,7 @@ import json
 # 🌍 Flux RSS Sky News uniquement
 rss_url = "https://feeds.skynews.com/feeds/rss/world.xml"
 
+
 # 📥 Récupération des titres
 feed = feedparser.parse(rss_url)
 print(f"🔍 Sky News → {len(feed.entries)} articles trouvés")
